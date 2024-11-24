@@ -1,0 +1,75 @@
+# Node.js core dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build files
+dist/
+build/
+.tmp/
+*.log
+
+# Environment and configuration files
+.env
+.env.local
+.env.*.local
+
+# Debugger files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs and runtime data
+logs/
+*.log
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage reports
+coverage/
+
+# Temporary files and directories
+*.tmp
+*.temp
+
+# Cache files
+.cache/
+.nyc_output/
+*.cache
+*.eslintcache
+*.prettiercache
+
+# Optional npm/yarn linked modules
+*.tgz
+
+# Docker files (if using Docker)
+docker-compose.override.yml
+.dockerignore
+
+# IDE-specific files
+*.iml
+*.sublime-project
+*.sublime-workspace
+
+# Test-related files
+test-output/
+.jest/
+
+# Static files (if you use them for temporary storage)
+public/uploads/
+uploads/
+
+# Linting or formatting reports
+lint-staged.config.js

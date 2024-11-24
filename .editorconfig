@@ -1,0 +1,36 @@
+# EditorConfig giúp định nghĩa phong cách code trong dự án
+# https://editorconfig.org
+
+# Áp dụng cho tất cả các file
+[*]
+charset = utf-8            # Sử dụng mã hóa UTF-8
+end_of_line = lf           # Sử dụng ký tự xuống dòng LF (Linux/Unix)
+insert_final_newline = true # Thêm dòng trống ở cuối file
+indent_style = space       # Dùng khoảng trắng thay vì tab
+indent_size = 2            # Số khoảng trắng mỗi lần thụt lề
+trim_trailing_whitespace = true # Xóa khoảng trắng dư thừa ở cuối dòng
+
+# Áp dụng cho file Markdown
+[*.md]
+max_line_length = off      # Không giới hạn độ dài dòng
+trim_trailing_whitespace = false # Giữ khoảng trắng cuối dòng (Markdown cần)
+
+# Áp dụng cho file JSON
+[*.json]
+indent_style = space
+indent_size = 2
+
+# Áp dụng cho file YAML
+[*.yml, *.yaml]
+indent_style = space
+indent_size = 2
+
+# Áp dụng cho file JavaScript, TypeScript
+[*.js, *.ts]
+indent_style = space
+indent_size = 2
+
+# Áp dụng cho file CSS, SCSS, và HTML
+[*.css, *.scss, *.html]
+indent_style = space
+indent_size = 2
