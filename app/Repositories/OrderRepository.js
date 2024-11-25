@@ -6,6 +6,18 @@ class OrderRepository {
   findWhere(args) {
     //
   }
+
+  create () {
+    //
+  }
+
+  update () {
+    //
+  }
+
+  delete () {
+    //
+  }
 }
 
 module.exports = OrderRepository
