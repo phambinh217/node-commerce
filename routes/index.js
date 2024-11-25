@@ -1,8 +1,11 @@
 var express = require('express');
 var router = express.Router();
-const OrderController = require('../app/Http/Controllers/OrderController');
 
 /* GET home page. */
-router.get('/', OrderController.index);
+router.get('/', function (req, res) {
+  return res.json({
+    message: 'Welcome to Node Commerce - A headless commerce platform'
+  })
+});
 
 module.exports = router;
