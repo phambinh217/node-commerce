@@ -73,3 +73,6 @@ uploads/
 
 # Linting or formatting reports
 lint-staged.config.js
+
+# Keys
+*key.json
