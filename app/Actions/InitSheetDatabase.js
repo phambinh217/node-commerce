@@ -1,6 +1,10 @@
 const CreateSheet = require("@/app/GoogleSheet/Actions/CreateSheet");
 const CreateSheetData = require("@/app/GoogleSheet/Data/CreateSheetData");
-const InitSheetRows = require("@/app/GoogleSheet/Actions/InitSheetRows");
+const {
+  gSheet,
+  gSheetRows,
+  gSheetRow,
+} = require("@/app/GoogleSheet/Utilities/Google");
 
 class InitSheetDatabase {
   constructor(data) {
@@ -12,23 +16,28 @@ class InitSheetDatabase {
   }
 
   async execute() {
-    /**
-     * Step 1. Create new blank sheet
-     */
+    const sheets = [
+      gSheet({
+        title: "Products",
+        data: gSheetRows([
+          gSheetRow(["Name", "Email", "Address"]),
+          gSheetRow(["Product 1", "p1@p1.com", "123 Main St"]),
+          gSheetRow(["Product 2", "p2@p2.com", "456 Elm St"]),
+        ]),
+      }),
+
+      gSheet({
+        title: "Orders",
+      }),
+    ];
+
     const sheetData = await CreateSheet.make(
       CreateSheetData.make({
         name: this.data.name,
         email: this.data.email,
+        sheets,
       })
     ).execute();
-
-    /**
-     * Initialize rows as database
-     */
-    await InitSheetRows.make({
-      sheetId: sheetData.id,
-      rows: [["Name", "Email"]],
-    }).execute();
 
     return sheetData;
   }

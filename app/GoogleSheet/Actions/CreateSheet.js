@@ -1,4 +1,7 @@
-const { googleDriveFactory } = require("@/app/GoogleSheet/Utilities/Google");
+const {
+  googleSheetFactory,
+  googleDriveFactory,
+} = require("@/app/GoogleSheet/Utilities/GoogleFactory");
 const BadAction = require("@/app/Utilities/BadAction");
 
 class CreateSheet {
@@ -12,17 +15,20 @@ class CreateSheet {
 
   async execute() {
     try {
-      const googleDrive = await googleDriveFactory();
+      const sheets = await googleSheetFactory();
 
-      const response = await googleDrive.files.create({
-        resource: {
-          name: this.data.name,
-          mimeType: "application/vnd.google-apps.spreadsheet",
+      const response = await sheets.spreadsheets.create({
+        requestBody: {
+          properties: {
+            title: this.data.name,
+          },
+          sheets: this.data.sheets,
         },
-        fields: "id",
       });
 
-      const fileId = response.data.id;
+      const fileId = response.data.spreadsheetId;
+
+      const googleDrive = await googleDriveFactory();
 
       await googleDrive.permissions.create({
         fileId: fileId,
@@ -34,7 +40,6 @@ class CreateSheet {
       });
 
       return response.data;
-
     } catch (error) {
       return BadAction.fromString("Failed to create Google Sheet: " + error);
     }

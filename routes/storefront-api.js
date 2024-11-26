@@ -17,8 +17,12 @@ router.get("/test", async function (req, res) {
     email: 'phambinh217@gmail.com',
   }).execute();
 
+  const sheetId = r.spreadsheetId;
+  const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}`;
+
   return res.json({
     success: true,
+    sheetUrl: sheetUrl
   });
 });
 

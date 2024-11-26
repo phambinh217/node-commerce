@@ -1,32 +1,30 @@
-const { google } = require("googleapis");
+const gSheetRow = (data) => {
+  return {
+    values: data.map((item) => ({ userEnteredValue: { stringValue: item } })),
+  };
+};
 
-const KEY_FILE_PATH = "./storage/keys/google-api-key.json";
+const gSheetRows = (rowData) => {
+  return [
+    {
+      startRow: 0,
+      startColumn: 0,
+      rowData,
+    },
+  ];
+};
 
-const SCOPES = [
-  "https://www.googleapis.com/auth/drive",
-  "https://www.googleapis.com/auth/spreadsheets",
-];
-
-const auth = new google.auth.GoogleAuth({
-  keyFile: KEY_FILE_PATH,
-  scopes: SCOPES,
-});
-
-const googleDriveFactory = async () => {
-  const authClient = await auth.getClient();
-  const drive = google.drive({ version: "v3", auth: authClient });
-
-  return drive;
-}
-
-const googleSheetFactory = async () => {
-  const authClient = await auth.getClient();
-  const sheets = google.sheets({ version: "v4", auth: authClient });
-
-  return sheets;
-}
+const gSheet = ({ title, data }) => {
+  return {
+    properties: {
+      title: title,
+    },
+    data: data,
+  };
+};
 
 module.exports = {
-  googleDriveFactory,
-  googleSheetFactory,
-}
+  gSheet,
+  gSheetRow,
+  gSheetRows,
+};
