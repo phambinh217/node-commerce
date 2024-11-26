@@ -75,4 +75,4 @@ uploads/
 lint-staged.config.js
 
 # Keys
-*key.json
+google-api-key.json
