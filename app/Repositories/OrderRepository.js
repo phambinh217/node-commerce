@@ -1,5 +1,6 @@
 const { apiUrl } = require("@/config/googleSheet");
 const { sendRequest } = require("@/app/Utilities/GoogleSheet");
+const { jsonToString } = require("@/app/Utilities/Json");
 
 class OrderRepository {
   getWhere(args) {
@@ -24,7 +25,8 @@ class OrderRepository {
         billingName: order.billingName,
         billingPhoneNumber: order.billingPhoneNumber,
         billingEmail: order.billingEmail,
-        lineItems: JSON.stringify(order.lineItems),
+        lineItems: jsonToString(order.lineItems),
+        paymentStatus: order.paymentStatus,
         discount: order.discount,
         subtotal: order.subtotal,
         total: order.total

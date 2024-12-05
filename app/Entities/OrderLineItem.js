@@ -3,6 +3,7 @@ class OrderLineItem {
     this.name = data.name;
     this.quantity = data.quantity;
     this.price = data.price;
+    this.sku = data.sku;
   }
 
   static make(data) {

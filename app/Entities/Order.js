@@ -12,6 +12,7 @@ class Order {
     this.billingEmail = data.billingEmail;
     this.lineItems = data.lineItems || [];
     this.discount = data.discount ?? 0;
+    this.paymentStatus = data.paymentStatus || "unpaid";
 
     /**
      * Readonly properties

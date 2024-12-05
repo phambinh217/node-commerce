@@ -29,6 +29,7 @@ class CreateOrder {
       billingPhoneNumber: this.data.billingPhoneNumber,
       billingEmail: this.data.billingEmail,
       lineItems: this.data.lineItems?.map(OrderLineItem.make),
+      paymentStatus: "unpaid",
     });
 
     order.calculateTotal();

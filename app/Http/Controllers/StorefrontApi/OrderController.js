@@ -33,7 +33,8 @@ class OrderController {
       lineItems: order.lineItems,
       discount: order.discount,
       subtotal: order.subtotal,
-      total: order.total
+      total: order.total,
+      paymentStatus: order.paymentStatus
     }
   }
 }
