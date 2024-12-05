@@ -10,8 +10,4 @@ const OrderController = require("../app/Http/Controllers/StorefrontApi/OrderCont
 router.get("/orders", OrderController.index);
 router.post("/orders", OrderController.store);
 
-router.get("/test", async function (req, res) {
-  //
-});
-
 module.exports = router;

@@ -26,6 +26,7 @@ class OrderController {
 
   static getResource (order) {
     return {
+      id: order.id,
       billingName: order.billingName,
       billingPhoneNumber: order.billingPhoneNumber,
       billingEmail: order.billingEmail,

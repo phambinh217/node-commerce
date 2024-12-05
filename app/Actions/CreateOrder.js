@@ -1,10 +1,15 @@
-const Order = require("../Entities/Order");
-const OrderLineItem = require("../Entities/OrderLineItem");
-const BadAction = require("../Utilities/BadAction");
+const Order = require("@/app/Entities/Order");
+const OrderLineItem = require("@/app/Entities/OrderLineItem");
+const BadAction = require("@/app/Utilities/BadAction");
+const OrderRepository = require("@/app/Repositories/OrderRepository");
 
 class CreateOrder {
+  /**
+   * @param app/Data/CreateOrderData data
+   */
   constructor(data) {
     this.data = data;
+    this.orderRepository = new OrderRepository();
   }
 
   static make(data) {
@@ -27,6 +32,8 @@ class CreateOrder {
     });
 
     order.calculateTotal();
+
+    this.orderRepository.create(order);
 
     return order;
   }
