@@ -13,6 +13,7 @@ class Order {
     this.billingEmail = data.billingEmail;
     this.lineItems = data.lineItems || [];
     this.discount = data.discount ?? 0;
+    this.billingAddress = data.billingAddress;
 
     /**
      * Timestamps

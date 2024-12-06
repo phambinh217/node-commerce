@@ -54,6 +54,7 @@ class OrderRepository {
         billingName: order.billingName,
         billingPhoneNumber: order.billingPhoneNumber,
         billingEmail: order.billingEmail,
+        billingAddress: order.billingAddress,
         lineItems: jsonToString(order.lineItems),
         paymentStatus: order.paymentStatus,
         discount: order.discount,

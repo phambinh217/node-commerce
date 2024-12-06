@@ -4,6 +4,7 @@ class CreateOrderData {
     this.billingPhoneNumber = data.billingPhoneNumber;
     this.billingEmail = data.billingEmail;
     this.lineItems = data.lineItems;
+    this.billingAddress = data.billingAddress;
   }
 
   static make(data) {

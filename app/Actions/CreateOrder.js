@@ -28,6 +28,7 @@ class CreateOrder {
       billingName: this.data.billingName,
       billingPhoneNumber: this.data.billingPhoneNumber,
       billingEmail: this.data.billingEmail,
+      billingAddress: this.data.billingAddress,
       lineItems: this.data.lineItems?.map(OrderLineItem.make),
     });
 
