@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
+const { PAYMENT_STATUS } = require("@/app/Consts/Order");
 
 class Order {
   constructor(data) {
@@ -12,7 +13,7 @@ class Order {
     this.billingEmail = data.billingEmail;
     this.lineItems = data.lineItems || [];
     this.discount = data.discount ?? 0;
-    this.paymentStatus = data.paymentStatus || "unpaid";
+    this.paymentStatus = data.paymentStatus || PAYMENT_STATUS.UNPAID;
 
     /**
      * Readonly properties

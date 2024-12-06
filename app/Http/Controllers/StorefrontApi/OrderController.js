@@ -24,6 +24,10 @@ class OrderController {
     return res.json(OrderController.getResource(result));
   }
 
+  update (req, res) {
+    //
+  }
+
   static getResource (order) {
     return {
       id: order.id,
