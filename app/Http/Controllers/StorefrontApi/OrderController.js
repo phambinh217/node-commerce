@@ -14,7 +14,7 @@ class OrderController {
     })
   }
 
-  store (req, res) {
+  create (req, res) {
     const result = CreateOrder.make(CreateOrderData.make(req.body)).execute();
 
     if (BadAction.is(result)) {
@@ -24,7 +24,23 @@ class OrderController {
     return res.json(OrderController.getResource(result));
   }
 
-  update (req, res) {
+  show (req, res) {
+    //
+  }
+
+  updateDiscount (req, res) {
+    //
+  }
+
+  updateItems (req, res) {
+    //
+  }
+
+  updateBilling (req, res) {
+    //
+  }
+
+  pay (req, res) {
     //
   }
 

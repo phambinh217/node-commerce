@@ -7,7 +7,8 @@ const OrderController = require("../app/Http/Controllers/StorefrontApi/OrderCont
  * Order routes
  * ------------------------
  */
-router.get("/orders", OrderController.index);
-router.post("/orders", OrderController.store);
+router.get("/orders", (req, res) => OrderController.index(req, res));
+router.post("/orders", (req, res) => OrderController.create(req, res));
+router.get("/orders/:id", (req, res) => OrderController.create(req, res));
 
 module.exports = router;

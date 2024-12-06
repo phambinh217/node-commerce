@@ -13,7 +13,18 @@ class Order {
     this.billingEmail = data.billingEmail;
     this.lineItems = data.lineItems || [];
     this.discount = data.discount ?? 0;
+
+    /**
+     * Timestamps
+     */
+    this.createdAt = data.createdAt;
+    this.updatedAt = data.updatedAt;
+
+    /**
+     * Payment properties
+     */
     this.paymentStatus = data.paymentStatus || PAYMENT_STATUS.UNPAID;
+    this.paidAt = data.paidAt;
 
     /**
      * Readonly properties

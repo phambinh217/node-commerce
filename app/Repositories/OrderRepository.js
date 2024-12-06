@@ -3,12 +3,24 @@ const { sendRequest } = require("@/app/Utilities/GoogleSheet");
 const { jsonToString } = require("@/app/Utilities/Json");
 
 class OrderRepository {
-  getWhere(args) {
-    //
+  getWhere(where) {
+    return sendRequest(apiUrl, {
+      sheet_title: "orders",
+      command: "LIST_ROWS_COMMAND",
+      data: {
+        where,
+      },
+    });
   }
 
-  findWhere(args) {
-    //
+  findWhere(where) {
+    return sendRequest(apiUrl, {
+      sheet_title: "orders",
+      command: "FIND_ROW_COMMAND",
+      data: {
+        where,
+      },
+    });
   }
 
   /**

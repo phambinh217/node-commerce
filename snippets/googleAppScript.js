@@ -156,6 +156,40 @@ commands.push({
 });
 
 /**
+ * Find a single row based on the given condition
+ * @param {Sheet} sheet - The sheet to search in
+ * @param {Object} where - The condition to find the row, e.g., {id: 1}
+ * @returns {Object} - JSON response with the matching row or a message
+ */
+const FIND_ROW_COMMAND = ({ sheet, where }) => {
+  const headers = getSheetHeaders(sheet);
+  const rows = getSheetData(sheet);
+
+  if (!headers || rows.length === 0) {
+    return responseJson({ message: "No data available in the sheet." });
+  }
+
+  const conditionKeys = Object.keys(where);
+
+  for (const row of rows) {
+    const rowObject = objectCombine(headers, row);
+    if (isRowMatchingConditions(rowObject, conditionKeys, where)) {
+      return responseJson({
+        message: "Row found",
+        data: rowObject,
+      });
+    }
+  }
+
+  return responseJson({ message: "No matching row found" });
+};
+
+commands.push({
+  name: "FIND_ROW_COMMAND",
+  command: FIND_ROW_COMMAND,
+});
+
+/**
  * Get all data rows from the sheet (excluding headers)
  * @param {Sheet} sheet - The sheet object
  * @returns {Array} - Array of data rows
