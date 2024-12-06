@@ -27,10 +27,11 @@ class Order {
     this.paidAt = data.paidAt;
 
     /**
-     * Readonly properties
+     * Total
      */
-    this.subtotal = 0;
-    this.total = 0;
+    this.subtotal = data.subtotal || 0;
+    this.total = data.total || 0;
+    this.discount = data.discount || 0;
   }
 
   static make(data) {
@@ -42,6 +43,7 @@ class Order {
       (acc, item) => acc + item.price * item.quantity,
       0
     );
+
     this.total = this.subtotal - this.discount;
   }
 }
