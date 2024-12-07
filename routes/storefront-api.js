@@ -3,6 +3,25 @@ const router = express.Router();
 const OrderController = require("@/app/Http/Controllers/StorefrontApi/OrderController");
 const ProductController = require("@/app/Http/Controllers/StorefrontApi/ProductController");
 const ProductCollectionController = require("@/app/Http/Controllers/StorefrontApi/ProductCollectionController");
+const SettingController = require("@/app/Http/Controllers/StorefrontApi/SettingController");
+const AuthController = require("@/app/Http/Controllers/StorefrontApi/AuthController");
+const SaleReportController = require("@/app/Http/Controllers/StorefrontApi/SaleReportController");
+
+/**
+ * ------------------------
+ * Setting routes
+ * ------------------------
+ */
+router.get("/settings", (req, res) => SettingController.index(req, res));
+
+/**
+ * ------------------------
+ * Auth routes
+ * ------------------------
+ */
+router.post("/auth/login", (req, res) => AuthController.login(req, res));
+router.get("/auth/me", (req, res) => AuthController.me(req, res));
+router.delete("/auth/logout", (req, res) => AuthController.logout(req, res));
 
 /**
  * ------------------------
@@ -22,5 +41,12 @@ router.put("/orders/:orderNumber/line-items", (req, res) => OrderController.upda
 router.get("/products", (req, res) => ProductController.index(req, res));
 router.get("/products/collections", (req, res) => ProductCollectionController.index(req, res));
 router.get("/products/:group", (req, res) => ProductController.show(req, res));
+
+/**
+ * ------------------------
+ * Report routes
+ * ------------------------
+ */
+router.get("/reports/sale-report", (req, res) => SaleReportController.index(req, res));
 
 module.exports = router;
