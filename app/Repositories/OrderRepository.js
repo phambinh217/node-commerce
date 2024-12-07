@@ -54,7 +54,7 @@ class OrderRepository {
       apiUrl,
       rows.map((data) => {
         return {
-          sheet: "orders_v2",
+          sheet: "orders",
           command: "UPDATE_OR_CREATE_COMMAND",
           data,
         };
