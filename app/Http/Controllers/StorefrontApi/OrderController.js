@@ -1,5 +1,4 @@
 const CreateOrder = require("@/app/Actions/CreateOrder");
-const CreateOrderData = require("@/app/Data/CreateOrderData");
 const BadAction = require("@/app/Utilities/BadAction");
 const OrderRepository = require("@/app/Repositories/OrderRepository");
 const UpdateOrderLineItem = require("@/app/Actions/UpdateOrderLineItem");
@@ -16,7 +15,7 @@ class OrderController {
   }
 
   create(req, res) {
-    const result = CreateOrder.make(CreateOrderData.make(req.body)).execute();
+    const result = CreateOrder.make(req.body).execute();
 
     if (BadAction.is(result)) {
       return result.badRequestJson(res);

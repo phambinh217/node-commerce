@@ -43,6 +43,8 @@ class GoogleSheetOrderRow {
         subtotal: order.subtotal,
         total: order.total,
         paymentStatus: order.paymentStatus,
+        createdAt: order.createdAt,
+        updatedAt: order.updatedAt,
       })
     );
 
@@ -56,6 +58,9 @@ class GoogleSheetOrderRow {
           itemName: lineItem.name,
           price: lineItem.price,
           quantity: lineItem.quantity,
+          subtotal: lineItem.subtotal,
+          createdAt: lineItem.createdAt,
+          updatedAt: lineItem.updatedAt,
         })
       );
     }
@@ -80,6 +85,8 @@ class GoogleSheetOrderRow {
       subtotal: data.subtotal,
       total: data.total,
       paymentStatus: data.paymentStatus,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
 
       /**
        * Item information
