@@ -1,10 +1,12 @@
 const { apiUrl } = require("@/config/googleSheet");
 const { sendRequest } = require("@/app/Utilities/GoogleSheet");
-const { jsonToString } = require("@/app/Utilities/Json");
 const Order = require("@/app/Entities/Order");
 const OrderLineItem = require("@/app/Entities/OrderLineItem");
+const GoogleSheetOrderRow = require("@/app/Repositories/GoogleSheet/GoogleSheetOrderRow");
 
 class OrderRepository {
+
+
   getWhere(where) {
     return sendRequest(apiUrl, {
       sheet_title: "orders",
@@ -46,22 +48,18 @@ class OrderRepository {
    * @return Promise
    */
   create(order) {
-    return sendRequest(apiUrl, {
-      sheet_title: "orders",
-      command: "UPDATE_OR_CREATE_COMMAND",
-      data: {
-        id: order.id,
-        billingName: order.billingName,
-        billingPhoneNumber: order.billingPhoneNumber,
-        billingEmail: order.billingEmail,
-        billingAddress: order.billingAddress,
-        lineItems: jsonToString(order.lineItems),
-        paymentStatus: order.paymentStatus,
-        discount: order.discount,
-        subtotal: order.subtotal,
-        total: order.total,
-      },
-    });
+    const rows = GoogleSheetOrderRow.fromOrderToRows(order);
+
+    return sendRequest(
+      apiUrl,
+      rows.map((data) => {
+        return {
+          sheet: "orders_v2",
+          command: "UPDATE_OR_CREATE_COMMAND",
+          data,
+        };
+      })
+    );
   }
 
   update() {

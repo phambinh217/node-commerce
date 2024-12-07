@@ -6,11 +6,9 @@ class ProductController {
   }
 
   async index(req, res) {
-    await this.productRepository.load();
+    const products = await this.productRepository.getWhere({});
 
-    return res.json({
-      message: 'List of all products',
-    })
+    return res.json(products)
   }
 
   static getResource (product) {

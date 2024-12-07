@@ -2,6 +2,7 @@ const Order = require("@/app/Entities/Order");
 const OrderLineItem = require("@/app/Entities/OrderLineItem");
 const BadAction = require("@/app/Utilities/BadAction");
 const OrderRepository = require("@/app/Repositories/OrderRepository");
+const OrderNumberManager = require("@/app/Utilities/OrderNumberManager");
 
 class CreateOrder {
   /**
@@ -24,7 +25,10 @@ class CreateOrder {
       return BadAction.fromString("Invalid email address");
     }
 
+    const orderNumberManager = new OrderNumberManager();
+
     const order = Order.make({
+      orderNumber: orderNumberManager.generate(),
       billingName: this.data.billingName,
       billingPhoneNumber: this.data.billingPhoneNumber,
       billingEmail: this.data.billingEmail,

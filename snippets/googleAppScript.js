@@ -16,10 +16,12 @@ const UPDATE_OR_CREATE_COMMAND = ({ sheet, data, where }) => {
   addNewColumnsIfNeeded(sheet, headers, data);
 
   const whereColumn = Object.keys(where)?.[0];
-  const allColumns = headers.map(header => header);
+  const allColumns = headers.map((header) => header);
 
   if (whereColumn && !allColumns.includes(whereColumn)) {
-    return responseJson({ message: `Column ${whereColumn} not found in headers` });
+    return responseJson({
+      message: `Column ${whereColumn} not found in headers`,
+    });
   }
 
   const rowIndex = findRowIndex(sheet, whereColumn, where[whereColumn]);
@@ -48,7 +50,7 @@ const getSheetHeaders = (sheet) => {
 
   // Nếu sheet không có bất kỳ cột nào hoặc không có bất kỳ hàng dữ liệu nào
   if (lastRow === 0 || lastColumn === 0) {
-    return [];  // Trả về mảng rỗng nếu sheet trống
+    return []; // Trả về mảng rỗng nếu sheet trống
   }
 
   return sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
@@ -61,7 +63,7 @@ const getSheetHeaders = (sheet) => {
  * @param {Object} data - Data containing new fields to add as columns
  */
 const addNewColumnsIfNeeded = (sheet, headers, data) => {
-  const allColumns = headers.map(header => header);
+  const allColumns = headers.map((header) => header);
 
   for (const key in data) {
     if (!allColumns.includes(key)) {
@@ -84,16 +86,23 @@ const findRowIndex = (sheet, whereColumn, whereValue) => {
   if (!whereColumn || !whereValue) return -1;
 
   const headers = getSheetHeaders(sheet);
-  const targetColumnIndex = headers.map(header => header).indexOf(whereColumn);
+  const targetColumnIndex = headers
+    .map((header) => header)
+    .indexOf(whereColumn);
 
   if (targetColumnIndex === -1) return -1;
 
-  const range = sheet.getRange(2, targetColumnIndex + 1, sheet.getLastRow() - 1, 1);
+  const range = sheet.getRange(
+    2,
+    targetColumnIndex + 1,
+    sheet.getLastRow() - 1,
+    1
+  );
   const values = range.getValues();
 
   for (let i = 0; i < values.length; i++) {
     if (values[i][0] === whereValue) {
-      return i + 2;  // Row index is 1-based, so adding 2 accounts for header and 0-based index
+      return i + 2; // Row index is 1-based, so adding 2 accounts for header and 0-based index
     }
   }
 
@@ -108,7 +117,9 @@ const findRowIndex = (sheet, whereColumn, whereValue) => {
  * @param {Object} data - The new data to update
  */
 const updateRow = (sheet, rowIndex, headers, data) => {
-  const existingRow = sheet.getRange(rowIndex, 1, 1, headers.length).getValues()[0];
+  const existingRow = sheet
+    .getRange(rowIndex, 1, 1, headers.length)
+    .getValues()[0];
   const rowData = arrCombine(headers, data, existingRow);
   sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
 };
@@ -187,6 +198,44 @@ const FIND_ROW_COMMAND = ({ sheet, where }) => {
 commands.push({
   name: "FIND_ROW_COMMAND",
   command: FIND_ROW_COMMAND,
+});
+
+/**
+ * Delete a row from the sheet based on a condition
+ * @param {Sheet} sheet - The sheet to delete the row from
+ * @param {Object} where - The condition to find the row to delete, e.g., {id: 1}
+ * @returns {Object} - JSON response with success or failure message
+ */
+const DELETE_ROW_COMMAND = ({ sheet, where }) => {
+  const headers = getSheetHeaders(sheet);
+  const rows = getSheetData(sheet);
+
+  if (!headers || rows.length === 0) {
+    return responseJson({ message: "No data available in the sheet." });
+  }
+
+  const conditionKeys = Object.keys(where);
+  const rowIndex = findRowIndex(
+    sheet,
+    conditionKeys[0],
+    where[conditionKeys[0]]
+  );
+
+  if (rowIndex === -1) {
+    return responseJson({ message: "No matching row found to delete" });
+  }
+
+  // Xóa dòng tại rowIndex
+  sheet.deleteRow(rowIndex);
+
+  return responseJson({
+    message: "Row deleted successfully",
+  });
+};
+
+commands.push({
+  name: "DELETE_ROW_COMMAND",
+  command: DELETE_ROW_COMMAND,
 });
 
 /**
@@ -270,7 +319,9 @@ const arrCombine = (headers, data, existingRow = []) => {
 
   for (let i = 0; i < headers.length; i++) {
     const column = headers[i];
-    formattedData.push(data[column] !== undefined ? data[column] : existingRow[i]);
+    formattedData.push(
+      data[column] !== undefined ? data[column] : existingRow[i]
+    );
   }
 
   return formattedData;
@@ -296,33 +347,27 @@ function doGet(e) {
   return ContentService.createTextOutput("Use POST request to submit data.");
 }
 
-function doPost(e) {
-  const params = JSON.parse(e.postData.contents) || e.parameter;
-  const commandName = params?.command;
+function executeCommand(payload, index) {
+  const { sheet: sheetTitle, command: commandName, data, where } = payload;
 
   if (!commandName) {
-    return responseJson({
-      message: "Missing command param",
-      debug: {
-        e,
-        params,
-      },
-    });
+    return {
+      message: `Command ${index}: Missing command param`,
+    };
   }
 
   const command = commands.find((c) => c.name === commandName);
 
   if (!command) {
-    return responseJson({
-      message: `Command ${commandName} not found`,
-    });
+    return {
+      message: `Command ${index}: Command ${commandName} not found`,
+    };
   }
 
-  const sheetTitle = params.sheet || params.sheet_title;
   if (!sheetTitle) {
-    return responseJson({
-      message: "Missing sheet_title param",
-    });
+    return {
+      message: `Command ${index}: Missing sheet_title param`,
+    };
   }
 
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -335,9 +380,26 @@ function doPost(e) {
 
   const commandCallback = command.command;
 
-  return commandCallback({
+  commandCallback({
     sheet,
-    data: params.data || {},
-    where: params?.where || {},
+    data: data || {},
+    where: where || {},
   });
+
+  return {
+    message: `Command ${index}: Command ${commandName} executed successfully`,
+  }
+}
+
+function doPost(e) {
+  const commands = JSON.parse(e.postData.contents) || e.parameter;
+  const response = []
+
+  for (let i = 0; i < commands.length; i++) {
+    const payload = commands[i]
+    const output = executeCommand(payload, i);
+    response.push(output)
+  }
+
+  return responseJson(response);
 }

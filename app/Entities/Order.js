@@ -9,11 +9,12 @@ class Order {
      * Get & set properties
      */
     this.billingName = data.billingName;
-    this.billingPhoneNumber = data.billingPhoneNumber;
+    this.billingPhone = data.billingPhone;
     this.billingEmail = data.billingEmail;
     this.lineItems = data.lineItems || [];
     this.discount = data.discount ?? 0;
     this.billingAddress = data.billingAddress;
+    this.orderNumber = data.orderNumber;
 
     /**
      * Timestamps

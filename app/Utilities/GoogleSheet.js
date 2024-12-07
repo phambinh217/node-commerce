@@ -1,11 +1,13 @@
+const { toSnakeCase, toCamelCase } = require("./Object1");
+
 const sendRequest = (url, payload) => {
   return fetch(url, {
     method: "POST",
-    body: JSON.stringify(payload),
+    body: JSON.stringify(toSnakeCase(payload)),
   }).then(async (response) => {
     if (response.ok) {
       const json = await response.json();
-      return json;
+      return toCamelCase(json);
     }
   });
 };
