@@ -2,6 +2,7 @@ const CreateOrder = require("@/app/Actions/CreateOrder");
 const CreateOrderData = require("@/app/Data/CreateOrderData");
 const BadAction = require("@/app/Utilities/BadAction");
 const OrderRepository = require("@/app/Repositories/OrderRepository");
+const UpdateOrderLineItem = require("@/app/Actions/UpdateOrderLineItem");
 
 class OrderController {
   constructor() {
@@ -35,11 +36,20 @@ class OrderController {
     return res.json(OrderController.getResource(order));
   }
 
-  updateDiscount(req, res) {
-    //
+  async updateItems(req, res) {
+    const orderNumber = req.params.orderNumber;
+    const order = await this.orderRepository.findWhere({ orderNumber: orderNumber });
+
+    const result = UpdateOrderLineItem.make(order, req.body).execute();
+
+    if (BadAction.is(result)) {
+      return result.badRequestJson(res);
+    }
+
+    return res.json(OrderController.getResource(order));
   }
 
-  updateItems(req, res) {
+  updateDiscount(req, res) {
     //
   }
 

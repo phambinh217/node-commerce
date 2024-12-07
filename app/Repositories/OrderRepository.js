@@ -24,7 +24,7 @@ class OrderRepository {
         sheet: "orders",
         command: "LIST_ROWS_COMMAND",
         where,
-      }
+      },
     ]);
 
     const data = arrFirst(results);
@@ -56,15 +56,46 @@ class OrderRepository {
       rows.map((data) => {
         return {
           sheet: "orders",
-          command: "UPDATE_OR_CREATE_COMMAND",
+          command: "UPDATE_OR_CREATE_ROW_COMMAND",
           data,
         };
       })
     );
   }
 
-  update() {
-    //
+  updateItems(order, newLineItems) {
+    const currentOrder = { ...order };
+    const oldLineItems = currentOrder.lineItems.map((i) => i.id);
+
+    order.lineItems = newLineItems;
+
+    const rows = GoogleSheetOrderRow.fromOrderToRows(order);
+
+    const payload = [
+      /**
+       * Delete old line items
+       */
+      ...oldLineItems.map((id) => ({
+        sheet: "orders",
+        command: "DELETE_ROW_COMMAND",
+        where: { id },
+      })),
+
+      /**
+       * Insert new line items
+       */
+      ...rows
+      .filter((row) => row.type === "line_item")
+      .map((data) => {
+        return {
+          sheet: "orders",
+          command: "UPDATE_OR_CREATE_ROW_COMMAND",
+          data,
+        };
+      }),
+    ]
+
+    return sendRequest(apiUrl, payload);
   }
 }
 

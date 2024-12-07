@@ -10,14 +10,14 @@ class GoogleSheetOrderRow {
         const mainOrder = rows.find((p) => p.type === "order");
         const lineItems = rows.filter((p) => p.type === "line_item");
 
-        return {
-          ...Order.make(mainOrder),
+        return Order.make({
+          ...mainOrder,
           lineItems: lineItems.map((item) => OrderLineItem.make({
             ...item,
             sku: item.itemSku,
             name: item.itemName
           })),
-        };
+        });
       })
       .value();
   }

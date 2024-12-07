@@ -11,7 +11,7 @@ const commands = [];
  * @param {Object} data, the data you want to update or add, eg: {name: "John"}
  * @param {Object} where, the condition to find an existing row, eg: {id: 1}
  */
-const UPDATE_OR_CREATE_COMMAND = ({ sheet, data, where }) => {
+const UPDATE_OR_CREATE_ROW_COMMAND = ({ sheet, data, where }) => {
   const headers = getSheetHeaders(sheet);
   addNewColumnsIfNeeded(sheet, headers, data);
 
@@ -35,8 +35,8 @@ const UPDATE_OR_CREATE_COMMAND = ({ sheet, data, where }) => {
   }
 };
 commands.push({
-  name: "UPDATE_OR_CREATE_COMMAND",
-  command: UPDATE_OR_CREATE_COMMAND,
+  name: "UPDATE_OR_CREATE_ROW_COMMAND",
+  command: UPDATE_OR_CREATE_ROW_COMMAND,
 });
 
 /**
