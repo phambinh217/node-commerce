@@ -25,8 +25,8 @@ class OrderController {
   }
 
   async show(req, res) {
-    const orderId = req.params.id;
-    const order = await this.orderRepository.findWhere({ id: orderId });
+    const orderNumber = req.params.orderNumber;
+    const order = await this.orderRepository.findWhere({ orderNumber: orderNumber });
 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
@@ -54,8 +54,10 @@ class OrderController {
   static getResource(order) {
     return {
       id: order.id,
+      orderNumber: order.orderNumber,
       billingName: order.billingName,
-      billingPhoneNumber: order.billingPhoneNumber,
+      billingAddress: order.billingAddress,
+      billingPhone: order.billingPhone,
       billingEmail: order.billingEmail,
       lineItems: order.lineItems,
       discount: order.discount,

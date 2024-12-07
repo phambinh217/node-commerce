@@ -1,12 +1,9 @@
 const { apiUrl } = require("@/config/googleSheet");
 const { sendRequest } = require("@/app/Utilities/GoogleSheet");
-const Order = require("@/app/Entities/Order");
-const OrderLineItem = require("@/app/Entities/OrderLineItem");
+const { arrFirst } = require("@/app/Utilities/Arr");
 const GoogleSheetOrderRow = require("@/app/Repositories/GoogleSheet/GoogleSheetOrderRow");
 
 class OrderRepository {
-
-
   getWhere(where) {
     return sendRequest(apiUrl, {
       sheet_title: "orders",
@@ -22,23 +19,27 @@ class OrderRepository {
    * @returns null|app/Entities/Order
    */
   async findWhere(where) {
-    const { data: orderData } = await sendRequest(apiUrl, {
-      sheet_title: "orders",
-      command: "FIND_ROW_COMMAND",
-      where,
-    });
+    const results = await sendRequest(apiUrl, [
+      {
+        sheet: "orders",
+        command: "LIST_ROWS_COMMAND",
+        where,
+      }
+    ]);
 
-    if (!orderData) {
+    const data = arrFirst(results);
+
+    if (!data) {
       return null;
     }
 
-    if (orderData.lineItems) {
-      orderData.lineItems = JSON.parse(orderData.lineItems).map(
-        OrderLineItem.make
-      );
+    const rows = data?.data;
+
+    if (!rows) {
+      return null;
     }
 
-    return Order.make(orderData);
+    return arrFirst(GoogleSheetOrderRow.fromRowsToOrder(rows));
   }
 
   /**

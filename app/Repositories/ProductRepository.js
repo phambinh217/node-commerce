@@ -1,42 +1,32 @@
 const { apiUrl } = require("@/config/googleSheet");
 const { sendRequest } = require("@/app/Utilities/GoogleSheet");
+const { arrFirst } = require("@/app/Utilities/Arr");
 const Product = require("@/app/Entities/Product");
-const _ = require("lodash");
+const GoogleSheetProductRow = require("@/app/Repositories/GoogleSheet/GoogleSheetProductRow");
 
 class ProductRepository {
-  /**
-   * Convert from google sheet rows to products
-   *
-   * @param {Array} rows
-   * @returns array
-   */
-  toProducts(rows) {
-    return _.chain(rows)
-      .groupBy("group")
-      .map((products) => {
-        const mainProduct = products.find((p) => p.type === "product");
-        const variants = products.filter((p) => p.type === "variant");
-
-        return {
-          ...Product.make(mainProduct),
-          variants: variants.map((v) => Product.make(v)),
-        };
-      })
-      .value();
-  }
-
   async getWhere(where) {
-    const { data: rows } = await sendRequest(apiUrl, {
-      sheet_title: "products",
-      command: "LIST_ROWS_COMMAND",
-      where,
-    });
+    const results = await sendRequest(apiUrl, [
+      {
+        sheet: "products",
+        command: "LIST_ROWS_COMMAND",
+        where,
+      },
+    ]);
+
+    const data = arrFirst(results);
+
+    if (!data) {
+      return null;
+    }
+
+    const rows = data?.data;
 
     if (!rows) {
       return null;
     }
 
-    return this.toProducts(rows);
+    return GoogleSheetProductRow.fromRowsToProduct(rows);
   }
 
   /**

@@ -19,19 +19,19 @@ const UPDATE_OR_CREATE_COMMAND = ({ sheet, data, where }) => {
   const allColumns = headers.map((header) => header);
 
   if (whereColumn && !allColumns.includes(whereColumn)) {
-    return responseJson({
+    return {
       message: `Column ${whereColumn} not found in headers`,
-    });
+    };
   }
 
   const rowIndex = findRowIndex(sheet, whereColumn, where[whereColumn]);
 
   if (rowIndex !== -1) {
     updateRow(sheet, rowIndex, headers, data);
-    return responseJson({ message: "Row updated successfully" });
+    return { message: "Row updated successfully" };
   } else {
     createRow(sheet, headers, data);
-    return responseJson({ message: "Row created successfully" });
+    return { message: "Row created successfully" };
   }
 };
 commands.push({
@@ -146,18 +146,18 @@ const LIST_ROWS_COMMAND = ({ sheet, where }) => {
   const rows = getSheetData(sheet);
 
   if (!headers || rows.length === 0) {
-    return responseJson({ message: "No data available in the sheet." });
+    return { message: "No data available in the sheet." };
   }
 
   const matchingRows = filterRowsByCondition(headers, rows, where);
 
   if (matchingRows.length > 0) {
-    return responseJson({
+    return {
       message: "Rows found",
       data: matchingRows,
-    });
+    };
   } else {
-    return responseJson({ message: "No matching rows found" });
+    return { message: "No matching rows found" };
   }
 };
 
@@ -177,7 +177,7 @@ const FIND_ROW_COMMAND = ({ sheet, where }) => {
   const rows = getSheetData(sheet);
 
   if (!headers || rows.length === 0) {
-    return responseJson({ message: "No data available in the sheet." });
+    return { message: "No data available in the sheet." };
   }
 
   const conditionKeys = Object.keys(where);
@@ -185,14 +185,14 @@ const FIND_ROW_COMMAND = ({ sheet, where }) => {
   for (const row of rows) {
     const rowObject = objectCombine(headers, row);
     if (isRowMatchingConditions(rowObject, conditionKeys, where)) {
-      return responseJson({
+      return {
         message: "Row found",
         data: rowObject,
-      });
+      };
     }
   }
 
-  return responseJson({ message: "No matching row found" });
+  return { message: "No matching row found" };
 };
 
 commands.push({
@@ -211,7 +211,7 @@ const DELETE_ROW_COMMAND = ({ sheet, where }) => {
   const rows = getSheetData(sheet);
 
   if (!headers || rows.length === 0) {
-    return responseJson({ message: "No data available in the sheet." });
+    return { message: "No data available in the sheet." };
   }
 
   const conditionKeys = Object.keys(where);
@@ -222,15 +222,15 @@ const DELETE_ROW_COMMAND = ({ sheet, where }) => {
   );
 
   if (rowIndex === -1) {
-    return responseJson({ message: "No matching row found to delete" });
+    return { message: "No matching row found to delete" };
   }
 
   // Xóa dòng tại rowIndex
   sheet.deleteRow(rowIndex);
 
-  return responseJson({
+  return {
     message: "Row deleted successfully",
-  });
+  };
 };
 
 commands.push({
@@ -380,15 +380,13 @@ function executeCommand(payload, index) {
 
   const commandCallback = command.command;
 
-  commandCallback({
+  const result = commandCallback({
     sheet,
     data: data || {},
     where: where || {},
   });
 
-  return {
-    message: `Command ${index}: Command ${commandName} executed successfully`,
-  }
+  return result
 }
 
 function doPost(e) {

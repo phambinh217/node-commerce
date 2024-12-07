@@ -1,4 +1,27 @@
+const Order = require("@/app/Entities/Order");
+const OrderLineItem = require("@/app/Entities/OrderLineItem");
+const _ = require("lodash");
+
 class GoogleSheetOrderRow {
+  static fromRowsToOrder(rows) {
+    return _.chain(rows)
+      .groupBy("orderNumber")
+      .map((rows) => {
+        const mainOrder = rows.find((p) => p.type === "order");
+        const lineItems = rows.filter((p) => p.type === "line_item");
+
+        return {
+          ...Order.make(mainOrder),
+          lineItems: lineItems.map((item) => OrderLineItem.make({
+            ...item,
+            sku: item.itemSku,
+            name: item.itemName
+          })),
+        };
+      })
+      .value();
+  }
+
   /**
    * Convert order object to google sheet rows
    * @param {app/Entities/Order} order

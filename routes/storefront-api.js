@@ -10,7 +10,7 @@ const ProductController = require("../app/Http/Controllers/StorefrontApi/Product
  */
 router.get("/orders", (req, res) => OrderController.index(req, res));
 router.post("/orders", (req, res) => OrderController.create(req, res));
-router.get("/orders/:id", (req, res) => OrderController.show(req, res));
+router.get("/orders/:orderNumber", (req, res) => OrderController.show(req, res));
 
 /**
  * ------------------------
