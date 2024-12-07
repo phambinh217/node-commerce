@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
+const { PRODUCT_STATUS } = require("@/app/Consts/Product");
 
 class Product {
   constructor(data) {
@@ -20,7 +21,7 @@ class Product {
      */
     this.manageStock = data.manageStock ?? false;
     this.stockQuantity = data.stockQuantity ?? 0;
-    this.status = data.status ?? "active";
+    this.status = data.status ?? PRODUCT_STATUS.ACTIVE;
 
     /**
      * Images information
