@@ -18,5 +18,6 @@ router.get("/orders/:orderNumber", (req, res) => OrderController.show(req, res))
  * ------------------------
  */
 router.get("/products", (req, res) => ProductController.index(req, res));
+router.get("/products/:group", (req, res) => ProductController.show(req, res));
 
 module.exports = router;

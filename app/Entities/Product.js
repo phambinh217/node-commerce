@@ -2,8 +2,6 @@ const { v4: uuidv4 } = require("uuid");
 
 class Product {
   constructor(data) {
-    console.log(data);
-
     /**
      * Basic info
      */
