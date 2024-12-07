@@ -1,10 +1,12 @@
+const { order } = require("@/config/ecommerce");
+
 class OrderNumberManager {
   constructor() {
-    this.prefix = 'SHOP1-';
+    this.prefix = order.orderNumberPrefix;
   }
 
   generate() {
-    return `${this.prefix}-${Date.now()}`;
+    return `${this.prefix}${Date.now()}`;
   }
 }
 
