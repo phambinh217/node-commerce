@@ -1,4 +1,4 @@
-const { toSnakeCase, toCamelCase } = require("./Object");
+const { toSnakeCase, toCamelCase } = require("./Obj");
 
 const sendRequest = (url, payload) => {
   return fetch(url, {
