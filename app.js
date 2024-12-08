@@ -8,6 +8,7 @@ const cors = require("cors");
 
 const indexRouter = require("./routes/index");
 const storefrontApiRouter = require("./routes/storefront-api");
+const Jwt = require("./app/Utilities/Jwt");
 
 const app = express();
 
