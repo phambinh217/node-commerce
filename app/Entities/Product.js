@@ -26,18 +26,12 @@ class Product {
     /**
      * Images information
      */
-    this.image1 = data.image1;
-    this.image2 = data.image2;
+    this.images = data.images ?? [];
 
     /**
      * Options and variants
      */
-    this.option1 = data.option1;
-    this.option1Value = data.option1Value;
-    this.option2 = data.option2;
-    this.option2Value = data.option2Value;
-    this.option3 = data.option3;
-    this.option3Value = data.option3Value;
+    this.options = data.options ?? [];
     this.variants = data.variants;
   }
 

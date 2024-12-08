@@ -15,12 +15,67 @@ class GoogleSheetProductRow {
         const mainProduct = products.find((p) => p.type === "product");
         const variants = products.filter((p) => p.type === "variant");
 
+        const { options, images } =
+          GoogleSheetProductRow.getNestedProperties(mainProduct);
+
         return {
-          ...Product.make(mainProduct),
-          variants: variants.map((v) => Product.make(v)),
+          ...Product.make({
+            ...mainProduct,
+            options,
+            images,
+          }),
+          variants: variants.map((variant) => {
+            const { options, images } =
+              GoogleSheetProductRow.getNestedProperties(variant);
+
+            return Product.make({
+              ...variant,
+              options,
+              images,
+            });
+          }),
         };
       })
       .value();
+  }
+
+  /**
+   * Convert flat properties to nested
+   */
+  static getNestedProperties(row) {
+    const optionNames = [];
+    const optionValues = [];
+    const images = [];
+
+    for (let key in row) {
+      if (["option1", "option2", "option3"].includes(key) && row[key]) {
+        optionNames.push(row[key]);
+      }
+
+      if (["option1Value", "option2Value", "option3Value"].includes(key) && row[key]) {
+        optionValues.push(row[key]);
+      }
+
+      if (["image1", "image2", "image3", "image4", "image5"].includes(key) && row[key]) {
+        images.push(row[key]);
+      }
+    }
+
+    const options = _.zip(optionNames, optionValues).map(([name, value]) => {
+      if (row.type == 'product') {
+        value = value.split(",").map((v) => v.trim());
+      }
+
+      return {
+        name,
+        value,
+      }
+    });
+
+    return {
+      options,
+      images,
+    };
   }
 }
 
