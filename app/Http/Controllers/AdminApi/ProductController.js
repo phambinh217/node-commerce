@@ -22,6 +22,7 @@ class ProductController {
     return {
       id: product.getId(),
       sku: product.getSku(),
+      barcode: product.getBarcode(),
       price: product.getPrice(),
       group: product.getGroup(),
       type: product.getType(),
@@ -37,6 +38,7 @@ class ProductController {
         return {
           id: variation.getId(),
           sku: variation.getSku(),
+          barcode: variation.getBarcode(),
           price: variation.getPrice(),
           group: variation.getGroup(),
           type: variation.getType(),

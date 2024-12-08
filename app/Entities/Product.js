@@ -8,6 +8,7 @@ class Product {
      */
     this.id = data.id || uuidv4();
     this.sku = data.sku;
+    this.barcode = data.barcode;
     this.price = data.price;
     this.group = data.group;
     this.type = data.type;
@@ -45,6 +46,10 @@ class Product {
 
   getSku() {
     return this.sku;
+  }
+
+  getBarcode() {
+    return this.barcode;
   }
 
   getPrice() {
