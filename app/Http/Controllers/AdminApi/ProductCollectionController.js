@@ -12,7 +12,10 @@ class ProductCollectionController {
   }
 
   static getResource(productCollection) {
-    return productCollection;
+    return {
+      id: productCollection.getId(),
+      title: productCollection.getTitle(),
+    };
   }
 }
 

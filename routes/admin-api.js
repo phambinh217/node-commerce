@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const OrderController = require("@/app/Http/Controllers/StorefrontApi/OrderController");
-const ProductController = require("@/app/Http/Controllers/StorefrontApi/ProductController");
-const ProductCollectionController = require("@/app/Http/Controllers/StorefrontApi/ProductCollectionController");
-const SettingController = require("@/app/Http/Controllers/StorefrontApi/SettingController");
-const AuthController = require("@/app/Http/Controllers/StorefrontApi/AuthController");
-const SaleReportController = require("@/app/Http/Controllers/StorefrontApi/SaleReportController");
+const OrderController = require("@/app/Http/Controllers/AdminApi/OrderController");
+const ProductController = require("@/app/Http/Controllers/AdminApi/ProductController");
+const ProductCollectionController = require("@/app/Http/Controllers/AdminApi/ProductCollectionController");
+const SettingController = require("@/app/Http/Controllers/AdminApi/SettingController");
+const AuthController = require("@/app/Http/Controllers/AdminApi/AuthController");
+const SaleReportController = require("@/app/Http/Controllers/AdminApi/SaleReportController");
 
 /**
  * Middleware

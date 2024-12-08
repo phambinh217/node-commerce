@@ -29,14 +29,74 @@ class Product {
     this.images = data.images ?? [];
 
     /**
-     * Options and variants
+     * Options and variations
      */
     this.options = data.options ?? [];
-    this.variants = data.variants;
+    this.variations = data.variations;
   }
 
   static make(data) {
     return new Product(data);
+  }
+
+  getId() {
+    return this.id;
+  }
+
+  getSku() {
+    return this.sku;
+  }
+
+  getPrice() {
+    return this.price;
+  }
+
+  getGroup() {
+    return this.group;
+  }
+
+  getType() {
+    return this.type;
+  }
+
+  getTitle() {
+    return this.title;
+  }
+
+  getDescription() {
+    return this.description;
+  }
+
+  getShortDescription() {
+    return this.shortDescription;
+  }
+
+  getStatus() {
+    return this.status;
+  }
+
+  getManageStock() {
+    return this.manageStock;
+  }
+
+  getStockQuantity() {
+    return this.stockQuantity;
+  }
+
+  getImages() {
+    return this.images;
+  }
+
+  getOptions() {
+    return this.options;
+  }
+
+  getVariations() {
+    return this.variations;
+  }
+
+  getPurchasable() {
+    return true;
   }
 }
 

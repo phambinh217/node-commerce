@@ -20,6 +20,38 @@ class OrderLineItem {
   calculateTotal() {
     this.subtotal = this.quantity * this.price;
   }
+
+  getId () {
+    return this.id;
+  }
+
+  getName () {
+    return this.name;
+  }
+
+  getQuantity () {
+    return this.quantity;
+  }
+
+  getPrice () {
+    return this.price;
+  }
+
+  getSku () {
+    return this.sku;
+  }
+
+  getSubtotal () {
+    return this.subtotal;
+  }
+
+  getCreatedAt () {
+    return this.createdAt;
+  }
+
+  getUpdatedAt () {
+    return this.updatedAt;
+  }
 }
 
 module.exports = OrderLineItem;

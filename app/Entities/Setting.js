@@ -8,6 +8,18 @@ class Setting {
   static make(data) {
     return new Setting(data);
   }
+
+  getGroup() {
+    return this.group;
+  }
+
+  getKey() {
+    return this.key;
+  }
+
+  getValue() {
+    return this.value;
+  }
 }
 
 module.exports = Setting;

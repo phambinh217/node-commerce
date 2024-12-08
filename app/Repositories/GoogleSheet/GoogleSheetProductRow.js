@@ -13,28 +13,26 @@ class GoogleSheetProductRow {
       .groupBy("group")
       .map((products) => {
         const mainProduct = products.find((p) => p.type === "product");
-        const variants = products.filter((p) => p.type === "variant");
+        const variations = products.filter((p) => p.type === "variation");
 
         const { options, images } =
           GoogleSheetProductRow.getNestedProperties(mainProduct);
 
-        return {
-          ...Product.make({
-            ...mainProduct,
-            options,
-            images,
-          }),
-          variants: variants.map((variant) => {
+        return Product.make({
+          ...mainProduct,
+          options,
+          images,
+          variations: variations.map((variation) => {
             const { options, images } =
-              GoogleSheetProductRow.getNestedProperties(variant);
+              GoogleSheetProductRow.getNestedProperties(variation);
 
             return Product.make({
-              ...variant,
+              ...variation,
               options,
               images,
             });
           }),
-        };
+        });
       })
       .value();
   }

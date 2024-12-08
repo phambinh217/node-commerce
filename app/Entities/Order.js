@@ -13,8 +13,8 @@ class Order {
     this.billingPhone = data.billingPhone;
     this.billingEmail = data.billingEmail;
     this.lineItems = data.lineItems ?? [];
-    this.discount = data.discount ?? 0;
     this.billingAddress = data.billingAddress;
+    this.discount = data.discount ?? 0;
     this.orderNumber = data.orderNumber;
 
     /**
@@ -39,6 +39,62 @@ class Order {
 
   static make(data) {
     return new Order(data);
+  }
+
+  getId() {
+    return this.id;
+  }
+
+  getBillingName() {
+    return this.billingName;
+  }
+
+  getBillingPhone() {
+    return this.billingPhone;
+  }
+
+  getBillingEmail() {
+    return this.billingEmail;
+  }
+
+  getBillingAddress() {
+    return this.billingAddress;
+  }
+
+  getLineItems() {
+    return this.lineItems;
+  }
+
+  getDiscount() {
+    return this.discount;
+  }
+
+  getOrderNumber() {
+    return this.orderNumber;
+  }
+
+  getPaymentStatus() {
+    return this.paymentStatus;
+  }
+
+  getPaidAt() {
+    return this.paidAt;
+  }
+
+  getCreatedAt() {
+    return this.createdAt;
+  }
+
+  getUpdatedAt() {
+    return this.updatedAt;
+  }
+
+  getSubtotal() {
+    return this.subtotal;
+  }
+
+  getTotal() {
+    return this.total;
   }
 
   calculateTotal() {

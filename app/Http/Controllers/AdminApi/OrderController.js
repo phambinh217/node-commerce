@@ -62,17 +62,17 @@ class OrderController {
 
   static getResource(order) {
     return {
-      id: order.id,
-      orderNumber: order.orderNumber,
-      billingName: order.billingName,
-      billingAddress: order.billingAddress,
-      billingPhone: order.billingPhone,
-      billingEmail: order.billingEmail,
-      lineItems: order.lineItems,
-      discount: order.discount,
-      subtotal: order.subtotal,
-      total: order.total,
-      paymentStatus: order.paymentStatus,
+      id: order.getId(),
+      orderNumber: order.getOrderNumber(),
+      billingName: order.getBillingName(),
+      billingAddress: order.getBillingAddress(),
+      billingPhone: order.getBillingPhone(),
+      billingEmail: order.getBillingEmail(),
+      lineItems: order.getLineItems(),
+      discount: order.getDiscount(),
+      subtotal: order.getSubtotal(),
+      total: order.getTotal(),
+      paymentStatus: order.getPaymentStatus(),
     };
   }
 }

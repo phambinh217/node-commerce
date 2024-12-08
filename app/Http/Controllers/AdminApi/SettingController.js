@@ -12,7 +12,11 @@ class SettingController {
   }
 
   static getResource(setting) {
-    return setting;
+    return {
+      group: setting.getGroup(),
+      key: setting.getKey(),
+      value: setting.getValue(),
+    }
   }
 }
 

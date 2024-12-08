@@ -9,6 +9,14 @@ class ProductCollection {
   static make(data) {
     return new ProductCollection(data);
   }
+
+  getId() {
+    return this.id;
+  }
+
+  getTitle() {
+    return this.title;
+  }
 }
 
 module.exports = ProductCollection;
