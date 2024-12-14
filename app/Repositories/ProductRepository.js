@@ -8,7 +8,7 @@ class ProductRepository {
     const results = await sendRequest(apiUrl, [
       {
         sheet: "products",
-        command: "LIST_ROWS_COMMAND",
+        command: "LIST_ROW_COMMAND",
         where,
       },
     ]);
@@ -38,7 +38,7 @@ class ProductRepository {
     const results = await sendRequest(apiUrl, [
       {
         sheet: "products",
-        command: "LIST_ROWS_COMMAND",
+        command: "LIST_ROW_COMMAND",
         where,
       }
     ]);

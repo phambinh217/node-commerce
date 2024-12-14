@@ -7,7 +7,7 @@ class OrderRepository {
   getWhere(where) {
     return sendRequest(apiUrl, {
       sheet_title: "orders",
-      command: "LIST_ROWS_COMMAND",
+      command: "LIST_ROW_COMMAND",
       where,
     });
   }
@@ -22,7 +22,7 @@ class OrderRepository {
     const results = await sendRequest(apiUrl, [
       {
         sheet: "orders",
-        command: "LIST_ROWS_COMMAND",
+        command: "LIST_ROW_COMMAND",
         where,
       },
     ]);
@@ -61,6 +61,35 @@ class OrderRepository {
         };
       })
     );
+  }
+
+  updateWhole (order) {
+    const rows = GoogleSheetOrderRow.fromOrderToRows(order);
+
+    const payload = [
+      /**
+       * Delete all old data
+       */
+      {
+        sheet: "orders",
+        command: "DELETE_ROW_COMMAND",
+        where: { orderNumber: order.getOrderNumber() },
+      },
+
+      /**
+       * Insert new line items
+       */
+      ...rows
+      .map((data) => {
+        return {
+          sheet: "orders",
+          command: "UPDATE_OR_CREATE_ROW_COMMAND",
+          data,
+        };
+      }),
+    ]
+
+    return sendRequest(apiUrl, payload);
   }
 
   updateItems(order, newLineItems) {

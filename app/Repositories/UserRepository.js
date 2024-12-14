@@ -8,7 +8,7 @@ class UserRepository {
     const results = await sendRequest(apiUrl, [
       {
         sheet: "users",
-        command: "LIST_ROWS_COMMAND",
+        command: "LIST_ROW_COMMAND",
         where,
       },
     ]);

@@ -8,7 +8,7 @@ class ProductCollectionRepository {
     const results = await sendRequest(apiUrl, [
       {
         sheet: "product_collections",
-        command: "LIST_ROWS_COMMAND",
+        command: "LIST_ROW_COMMAND",
         where,
       },
     ]);

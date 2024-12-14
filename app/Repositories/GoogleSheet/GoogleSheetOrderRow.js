@@ -9,10 +9,32 @@ class GoogleSheetOrderRow {
       .map((rows) => {
         const mainOrder = rows.find((p) => p.type === "order");
         const lineItems = rows.filter((p) => p.type === "line_item");
+        const shippingLines = rows.filter((p) => p.type === "shipping_line");
+        const discountLines = rows.filter((p) => p.type === "discount_line");
+        const feeLines = rows.filter((p) => p.type === "fee_line");
 
         return Order.make({
           ...mainOrder,
+
           lineItems: lineItems.map((item) => OrderLineItem.make({
+            ...item,
+            sku: item.itemSku,
+            name: item.itemName
+          })),
+
+          shippingLines: shippingLines.map((item) => ({
+            ...item,
+            sku: item.itemSku,
+            name: item.itemName
+          })),
+
+          discountLines: discountLines.map((item) => ({
+            ...item,
+            sku: item.itemSku,
+            name: item.itemName
+          })),
+
+          feeLines: feeLines.map((item) => ({
             ...item,
             sku: item.itemSku,
             name: item.itemName
@@ -32,35 +54,93 @@ class GoogleSheetOrderRow {
 
     rows.push(
       GoogleSheetOrderRow.to({
-        id: order.id,
+        id: order.getId(),
         type: "order",
-        orderNumber: order.orderNumber,
-        billingName: order.billingName,
-        billingPhone: order.billingPhone,
-        billingEmail: order.billingEmail,
-        billingAddress: order.billingAddress,
-        discount: order.discount,
-        subtotal: order.subtotal,
-        total: order.total,
-        paymentStatus: order.paymentStatus,
-        createdAt: order.createdAt,
-        updatedAt: order.updatedAt,
+        orderNumber: order.getOrderNumber(),
+        billingName: order.getBillingName(),
+        billingPhone: order.getBillingPhone(),
+        billingEmail: order.getBillingEmail(),
+        billingAddress: order.getBillingAddress(),
+        discount: order.getDiscount(),
+        subtotal: order.getSubtotal(),
+        total: order.getTotal(),
+        status: order.getStatus(),
+        customerNote: order.getCustomerNote(),
+        customerId: order.getCustomerId(),
+        paymentStatus: order.getPaymentStatus(),
+        createdAt: order.getCreatedAt(),
+        updatedAt: order.getUpdatedAt(),
       })
     );
 
-    for (const lineItem of order.lineItems) {
+    for (const lineItem of order.getLineItems()) {
       rows.push(
         GoogleSheetOrderRow.to({
-          id: lineItem.id,
+          id: lineItem.getId(),
           type: "line_item",
-          orderNumber: order.orderNumber,
-          itemSku: lineItem.sku,
-          itemName: lineItem.name,
-          price: lineItem.price,
-          quantity: lineItem.quantity,
-          subtotal: lineItem.subtotal,
-          createdAt: lineItem.createdAt,
-          updatedAt: lineItem.updatedAt,
+          orderNumber: order.getOrderNumber(),
+          itemSku: lineItem.getSku(),
+          itemName: lineItem.getName(),
+          price: lineItem.getPrice(),
+          quantity: lineItem.getQuantity(),
+          discount: 0,
+          subtotal: lineItem.getSubtotal(),
+          createdAt: lineItem.getCreatedAt(),
+          updatedAt: lineItem.getUpdatedAt(),
+        })
+      );
+    }
+
+    for (const shippingLine of order.getShippingLines()) {
+      rows.push(
+        GoogleSheetOrderRow.to({
+          id: shippingLine.getId(),
+          type: "shipping_line",
+          orderNumber: order.getOrderNumber(),
+          itemSku: shippingLine.getSku(),
+          itemName: shippingLine.getName(),
+          price: shippingLine.getPrice(),
+          quantity: 1,
+          discount: 0,
+          subtotal: shippingLine.getPrice(),
+          createdAt: shippingLine.getCreatedAt(),
+          updatedAt: shippingLine.getUpdatedAt(),
+        })
+      );
+    }
+
+    for (const discountLine of order.getDiscountLines()) {
+      rows.push(
+        GoogleSheetOrderRow.to({
+          id: discountLine.getId(),
+          type: "discount_line",
+          orderNumber: order.getOrderNumber(),
+          itemSku: discountLine.getSku(),
+          itemName: discountLine.getName(),
+          price: 0,
+          quantity: 1,
+          subtotal: 0,
+          discount: discountLine.getDiscount(),
+          createdAt: discountLine.getCreatedAt(),
+          updatedAt: discountLine.getUpdatedAt(),
+        })
+      );
+    }
+
+    for (const feeLine of order.getFeeLines()) {
+      rows.push(
+        GoogleSheetOrderRow.to({
+          id: feeLine.getId(),
+          type: "fee_line",
+          orderNumber: order.getOrderNumber(),
+          itemSku: feeLine.getSku(),
+          itemName: feeLine.getName(),
+          price: feeLine.getPrice(),
+          quantity: 1,
+          discount: 0,
+          subtotal: feeLine.getPrice(),
+          createdAt: feeLine.getCreatedAt(),
+          updatedAt: feeLine.getUpdatedAt(),
         })
       );
     }

@@ -1,4 +1,5 @@
 const CreateOrder = require("@/app/Actions/CreateOrder");
+const UpdateUnpaidOrder = require("@/app/Actions/UpdateUnpaidOrder");
 const BadAction = require("@/app/Utilities/BadAction");
 const OrderRepository = require("@/app/Repositories/OrderRepository");
 const UpdateOrderLineItem = require("@/app/Actions/UpdateOrderLineItem");
@@ -26,7 +27,9 @@ class OrderController {
 
   async show(req, res) {
     const orderNumber = req.params.orderNumber;
-    const order = await this.orderRepository.findWhere({ orderNumber: orderNumber });
+    const order = await this.orderRepository.findWhere({
+      orderNumber: orderNumber,
+    });
 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
@@ -35,9 +38,30 @@ class OrderController {
     return res.json(OrderController.getResource(order));
   }
 
+  async updateWhenOrderIsUnpaid(req, res) {
+    const orderNumber = req.params.orderNumber;
+    const order = await this.orderRepository.findWhere({
+      orderNumber: orderNumber,
+    });
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    const result = UpdateUnpaidOrder.make(order, req.body).execute();
+
+    if (BadAction.is(result)) {
+      return result.badRequestJson(res);
+    }
+
+    return res.json(OrderController.getResource(order));
+  }
+
   async updateItems(req, res) {
     const orderNumber = req.params.orderNumber;
-    const order = await this.orderRepository.findWhere({ orderNumber: orderNumber });
+    const order = await this.orderRepository.findWhere({
+      orderNumber: orderNumber,
+    });
 
     const result = UpdateOrderLineItem.make(order, req.body).execute();
 
@@ -73,6 +97,12 @@ class OrderController {
       subtotal: order.getSubtotal(),
       total: order.getTotal(),
       paymentStatus: order.getPaymentStatus(),
+      status: order.getStatus(),
+      shippingLines: order.getShippingLines(),
+      feeLines: order.getFeeLines(),
+      discountLines: order.getDiscountLines(),
+      createdAt: order.getCreatedAt(),
+      updatedAt: order.getUpdatedAt(),
     };
   }
 }

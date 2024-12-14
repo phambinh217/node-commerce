@@ -136,12 +136,14 @@ const createRow = (sheet, headers, data) => {
 };
 
 /**
- * List rows from the sheet that match the given conditions
+ * List rows from the sheet that match the given conditions with pagination (limit and offset)
  * @param {Sheet} sheet - The sheet you want to get data from
  * @param {Object} where - The conditions to filter rows, e.g., {id: 1}
+ * @param {number} limit - Maximum number of rows to return (optional)
+ * @param {number} offset - Number of rows to skip from the start (optional)
  * @returns {Object} - JSON response with matching rows or a message
  */
-const LIST_ROWS_COMMAND = ({ sheet, where }) => {
+const LIST_ROW_COMMAND = ({ sheet, where, limit, offset }) => {
   const headers = getSheetHeaders(sheet);
   const rows = getSheetData(sheet);
 
@@ -149,12 +151,20 @@ const LIST_ROWS_COMMAND = ({ sheet, where }) => {
     return { message: "No data available in the sheet." };
   }
 
+  // Lọc các hàng dựa trên điều kiện
   const matchingRows = filterRowsByCondition(headers, rows, where);
 
-  if (matchingRows.length > 0) {
+  // Thiết lập giá trị mặc định cho limit và offset
+  const finalOffset = offset ? Math.max(0, offset) : 0; // Nếu không có offset, mặc định là 0
+  const finalLimit = limit ? Math.min(matchingRows.length, limit) : matchingRows.length; // Nếu không có limit, lấy tất cả
+
+  // Áp dụng offset và limit
+  const paginatedRows = matchingRows.slice(finalOffset, finalOffset + finalLimit);
+
+  if (paginatedRows.length > 0) {
     return {
       message: "Rows found",
-      data: matchingRows,
+      data: paginatedRows,
     };
   } else {
     return { message: "No matching rows found" };
@@ -162,8 +172,8 @@ const LIST_ROWS_COMMAND = ({ sheet, where }) => {
 };
 
 commands.push({
-  name: "LIST_ROWS_COMMAND",
-  command: LIST_ROWS_COMMAND,
+  name: "LIST_ROW_COMMAND",
+  command: LIST_ROW_COMMAND,
 });
 
 /**
@@ -199,12 +209,12 @@ commands.push({
   name: "FIND_ROW_COMMAND",
   command: FIND_ROW_COMMAND,
 });
-
 /**
- * Delete a row from the sheet based on a condition
- * @param {Sheet} sheet - The sheet to delete the row from
- * @param {Object} where - The condition to find the row to delete, e.g., {id: 1}
- * @returns {Object} - JSON response with success or failure message
+ * Delete rows from the sheet based on a condition.
+ * If the sheet has only one row of data left, clear its content instead of deleting.
+ * @param {Sheet} sheet - The sheet to delete rows from.
+ * @param {Object} where - The condition to find rows to delete, e.g., {id: 1}.
+ * @returns {Object} - JSON response with success or failure message.
  */
 const DELETE_ROW_COMMAND = ({ sheet, where }) => {
   const headers = getSheetHeaders(sheet);
@@ -215,21 +225,39 @@ const DELETE_ROW_COMMAND = ({ sheet, where }) => {
   }
 
   const conditionKeys = Object.keys(where);
-  const rowIndex = findRowIndex(
-    sheet,
-    conditionKeys[0],
-    where[conditionKeys[0]]
-  );
+  const rowsToDelete = [];
 
-  if (rowIndex === -1) {
-    return { message: "No matching row found to delete" };
+  // Find all rows matching the condition
+  rows.forEach((row, index) => {
+    const rowObject = objectCombine(headers, row);
+    if (isRowMatchingConditions(rowObject, conditionKeys, where)) {
+      rowsToDelete.push(index + 2); // Adjust for 0-based index and header row
+    }
+  });
+
+  if (rowsToDelete.length === 0) {
+    return { message: "No matching rows found to delete" };
   }
 
-  // Xóa dòng tại rowIndex
-  sheet.deleteRow(rowIndex);
+  // Special case: Only one row of data left after deletion
+  const totalDataRows = rows.length;
+  const remainingRows = totalDataRows - rowsToDelete.length;
+  const shouldClearContentOnLastRow = remainingRows === 0;
+
+  // Delete rows from bottom to top to avoid index shifting
+  rowsToDelete.reverse().forEach((rowIndex, index) => {
+    if (sheet.getLastRow() > 1) {
+      if (shouldClearContentOnLastRow && index === 0) {
+        sheet.getRange(rowIndex, 1, 1, headers.length).clearContent();
+      } else {
+        sheet.deleteRow(rowIndex);
+      }
+    }
+  });
 
   return {
-    message: "Row deleted successfully",
+    message: "Rows deleted successfully",
+    deletedRows: rowsToDelete.length,
   };
 };
 
@@ -348,7 +376,7 @@ function doGet(e) {
 }
 
 function executeCommand(payload, index) {
-  const { sheet: sheetTitle, command: commandName, data, where } = payload;
+  const { sheet: sheetTitle, command: commandName, data, where, limit, offset } = payload;
 
   if (!commandName) {
     return {
@@ -384,6 +412,8 @@ function executeCommand(payload, index) {
     sheet,
     data: data || {},
     where: where || {},
+    limit: limit || 0,
+    offset: offset || 0,
   });
 
   return result

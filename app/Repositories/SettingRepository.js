@@ -8,7 +8,7 @@ class SettingRepository {
     const results = await sendRequest(apiUrl, [
       {
         sheet: "settings",
-        command: "LIST_ROWS_COMMAND",
+        command: "LIST_ROW_COMMAND",
         where,
       },
     ]);

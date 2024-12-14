@@ -53,6 +53,9 @@ router.get("/orders/:orderNumber", (req, res) =>
 router.put("/orders/:orderNumber/line-items", (req, res) =>
   OrderController.updateItems(req, res)
 );
+router.put("/orders/:orderNumber", (req, res) =>
+  OrderController.updateWhenOrderIsUnpaid(req, res)
+);
 
 /**
  * ------------------------
