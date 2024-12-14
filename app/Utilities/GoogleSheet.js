@@ -3,7 +3,7 @@ const { toSnakeCase, toCamelCase } = require("./Obj");
 const sendRequest = (url, payload) => {
   const body = JSON.stringify(toSnakeCase(payload));
 
-  // console.log(body);
+  console.log(body);
 
   return fetch(url, {
     method: "POST",

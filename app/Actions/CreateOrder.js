@@ -3,6 +3,7 @@ const OrderLineItem = require("@/app/Entities/OrderLineItem");
 const OrderShippingLine = require("@/app/Entities/OrderShippingLine");
 const OrderFeeLine = require("@/app/Entities/OrderFeeLine");
 const OrderDiscountLine = require("@/app/Entities/OrderDiscountLine");
+const Address = require("@/app/Entities/Address");
 const BadAction = require("@/app/Utilities/BadAction");
 const OrderRepository = require("@/app/Repositories/OrderRepository");
 const OrderNumberManager = require("@/app/Utilities/OrderNumberManager");
@@ -31,11 +32,8 @@ class CreateOrder {
     const orderNumberManager = new OrderNumberManager();
 
     const order = Order.make({
+      billing: Address.make(this.data.billing),
       orderNumber: orderNumberManager.generate(),
-      billingName: this.data.billingName,
-      billingPhoneNumber: this.data.billingPhoneNumber,
-      billingEmail: this.data.billingEmail,
-      billingAddress: this.data.billingAddress,
       lineItems: this.data.lineItems?.map(OrderLineItem.make),
       shippingLines: this.data.shippingLines?.map(OrderShippingLine.make),
       feeLines: this.data.feeLines?.map(OrderFeeLine.make),

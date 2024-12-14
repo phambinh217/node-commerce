@@ -9,14 +9,10 @@ class Order {
     /**
      * Get & set properties
      */
-    this.billingName = data.billingName;
-    this.billingPhone = data.billingPhone;
-    this.billingEmail = data.billingEmail;
+    this.billing = data.billing;
     this.lineItems = data.lineItems || [];
-    this.billingAddress = data.billingAddress;
     this.orderNumber = data.orderNumber;
     this.customerNote = data.customerNote;
-    this.customerId = data.customerId;
 
     /**
      * Timestamps
@@ -75,36 +71,12 @@ class Order {
     this.status = value;
   }
 
-  getBillingName() {
-    return this.billingName;
+  getBilling() {
+    return this.billing;
   }
 
-  setBillingName(value) {
-    this.billingName = value;
-  }
-
-  getBillingPhone() {
-    return this.billingPhone;
-  }
-
-  setBillingPhone(value) {
-    this.billingPhone = value;
-  }
-
-  getBillingEmail() {
-    return this.billingEmail;
-  }
-
-  setBillingEmail(value) {
-    this.billingEmail = value;
-  }
-
-  getBillingAddress() {
-    return this.billingAddress;
-  }
-
-  setBillingAddress(value) {
-    this.billingAddress = value;
+  setBilling(value) {
+    this.billing = value;
   }
 
   getLineItems() {
@@ -129,14 +101,6 @@ class Order {
 
   setCustomerNote(value) {
     this.customerNote = value;
-  }
-
-  getCustomerId() {
-    return this.customerId;
-  }
-
-  setCustomerId(value) {
-    this.customerId = value;
   }
 
   getFeeLines() {

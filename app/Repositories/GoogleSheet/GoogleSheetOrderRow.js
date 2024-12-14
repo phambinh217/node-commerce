@@ -1,5 +1,9 @@
 const Order = require("@/app/Entities/Order");
 const OrderLineItem = require("@/app/Entities/OrderLineItem");
+const OrderShippingLine = require("@/app/Entities/OrderShippingLine");
+const OrderFeeLine = require("@/app/Entities/OrderFeeLine");
+const OrderDiscountLine = require("@/app/Entities/OrderDiscountLine");
+const Address = require("@/app/Entities/Address");
 const _ = require("lodash");
 
 class GoogleSheetOrderRow {
@@ -12,33 +16,50 @@ class GoogleSheetOrderRow {
         const shippingLines = rows.filter((p) => p.type === "shipping_line");
         const discountLines = rows.filter((p) => p.type === "discount_line");
         const feeLines = rows.filter((p) => p.type === "fee_line");
+        const billingProperties = {};
+
+        for (const key in mainOrder) {
+          if (key.startsWith("billing_")) {
+            billingProperties[key] = mainOrder[key];
+          }
+        }
 
         return Order.make({
           ...mainOrder,
 
-          lineItems: lineItems.map((item) => OrderLineItem.make({
-            ...item,
-            sku: item.itemSku,
-            name: item.itemName
-          })),
+          billing: Address.make(billingProperties),
 
-          shippingLines: shippingLines.map((item) => ({
-            ...item,
-            sku: item.itemSku,
-            name: item.itemName
-          })),
+          lineItems: lineItems.map((item) =>
+            OrderLineItem.make({
+              ...item,
+              sku: item.itemSku,
+              name: item.itemName,
+            })
+          ),
 
-          discountLines: discountLines.map((item) => ({
-            ...item,
-            sku: item.itemSku,
-            name: item.itemName
-          })),
+          shippingLines: shippingLines.map((item) =>
+            OrderShippingLine.make({
+              ...item,
+              sku: item.itemSku,
+              name: item.itemName,
+            })
+          ),
 
-          feeLines: feeLines.map((item) => ({
-            ...item,
-            sku: item.itemSku,
-            name: item.itemName
-          })),
+          discountLines: discountLines.map((item) =>
+            OrderDiscountLine.make({
+              ...item,
+              sku: item.itemSku,
+              name: item.itemName,
+            })
+          ),
+
+          feeLines: feeLines.map((item) =>
+            OrderFeeLine.make({
+              ...item,
+              sku: item.itemSku,
+              name: item.itemName,
+            })
+          ),
         });
       })
       .value();
@@ -57,16 +78,21 @@ class GoogleSheetOrderRow {
         id: order.getId(),
         type: "order",
         orderNumber: order.getOrderNumber(),
-        billingName: order.getBillingName(),
-        billingPhone: order.getBillingPhone(),
-        billingEmail: order.getBillingEmail(),
-        billingAddress: order.getBillingAddress(),
+        billingName: order.getBilling()?.getName(),
+        billingPhone: order.getBilling()?.getPhone(),
+        billingEmail: order.getBilling()?.getEmail(),
+        billingAddress: order.getBilling()?.getAddress(),
+        billingAddress2: order.getBilling()?.getAddress2(),
+        billingCity: order.getBilling()?.getCity(),
+        billingState: order.getBilling()?.getState(),
+        billingPostcode: order.getBilling()?.getPostcode(),
+        billingCountry: order.getBilling()?.getCountry(),
+        billingCompany: order.getBilling()?.getCompany(),
         discount: order.getDiscount(),
         subtotal: order.getSubtotal(),
         total: order.getTotal(),
         status: order.getStatus(),
         customerNote: order.getCustomerNote(),
-        customerId: order.getCustomerId(),
         paymentStatus: order.getPaymentStatus(),
         createdAt: order.getCreatedAt(),
         updatedAt: order.getUpdatedAt(),
@@ -161,6 +187,13 @@ class GoogleSheetOrderRow {
       billingPhone: data.billingPhone,
       billingEmail: data.billingEmail,
       billingAddress: data.billingAddress,
+      billingAddress2: data.billingAddress2,
+      billingCity: data.billingCity,
+      billingState: data.billingState,
+      billingPostcode: data.billingPostcode,
+      billingCountry: data.billingCountry,
+      billingCompany: data.billingCompany,
+      customerNote: data.customerNote,
       discount: data.discount,
       subtotal: data.subtotal,
       total: data.total,

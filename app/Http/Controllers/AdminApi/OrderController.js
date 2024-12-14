@@ -88,10 +88,7 @@ class OrderController {
     return {
       id: order.getId(),
       orderNumber: order.getOrderNumber(),
-      billingName: order.getBillingName(),
-      billingAddress: order.getBillingAddress(),
-      billingPhone: order.getBillingPhone(),
-      billingEmail: order.getBillingEmail(),
+      billing: order.getBilling(),
       lineItems: order.getLineItems(),
       discount: order.getDiscount(),
       subtotal: order.getSubtotal(),
