@@ -6,34 +6,34 @@ class Product {
     /**
      * Basic info
      */
-    this.id = data.id || uuidv4();
-    this.sku = data.sku;
-    this.barcode = data.barcode;
-    this.price = data.price;
-    this.group = data.group;
-    this.type = data.type;
-    this.title = data.title;
-    this.description = data.description;
-    this.shortDescription = data.shortDescription;
-    this.status = data.status;
+    this.id = data?.id || uuidv4();
+    this.sku = data?.sku;
+    this.barcode = data?.barcode;
+    this.price = data?.price;
+    this.group = data?.group;
+    this.type = data?.type;
+    this.title = data?.title;
+    this.description = data?.description;
+    this.shortDescription = data?.shortDescription;
+    this.status = data?.status;
 
     /**
      * Stock information
      */
-    this.manageStock = data.manageStock ?? false;
-    this.stockQuantity = data.stockQuantity ?? 0;
-    this.status = data.status ?? PRODUCT_STATUS.ACTIVE;
+    this.manageStock = data?.manageStock ?? false;
+    this.stockQuantity = data?.stockQuantity ?? 0;
+    this.status = data?.status ?? PRODUCT_STATUS.ACTIVE;
 
     /**
      * Images information
      */
-    this.images = data.images ?? [];
+    this.images = data?.images ?? [];
 
     /**
      * Options and variations
      */
-    this.options = data.options ?? [];
-    this.variations = data.variations;
+    this.options = data?.options ?? [];
+    this.variations = data?.variations;
   }
 
   static make(data) {

@@ -4,55 +4,55 @@ const { now } = require("@/app/Utilities/Datetime");
 
 class Order {
   constructor(data) {
-    this.id = data.id || uuidv4();
+    this.id = data?.id || uuidv4();
 
     /**
      * Get & set properties
      */
-    this.billing = data.billing;
-    this.lineItems = data.lineItems || [];
-    this.orderNumber = data.orderNumber;
-    this.customerNote = data.customerNote;
+    this.billing = data?.billing;
+    this.lineItems = data?.lineItems || [];
+    this.orderNumber = data?.orderNumber;
+    this.customerNote = data?.customerNote;
 
     /**
      * Timestamps
      */
-    this.createdAt = data.createdAt || now().format("YYYY-MM-DD HH:mm:ss");
-    this.updatedAt = data.updatedAt || now().format("YYYY-MM-DD HH:mm:ss");
+    this.createdAt = data?.createdAt || now().format("YYYY-MM-DD HH:mm:ss");
+    this.updatedAt = data?.updatedAt || now().format("YYYY-MM-DD HH:mm:ss");
 
     /**
      * Payment properties
      */
-    this.paymentStatus = data.paymentStatus || PAYMENT_STATUS.UNPAID;
-    this.paidAt = data.paidAt;
+    this.paymentStatus = data?.paymentStatus || PAYMENT_STATUS.UNPAID;
+    this.paidAt = data?.paidAt;
 
     /**
      * Shippings
      */
-    this.shippingLines = data.shippingLines || [];
+    this.shippingLines = data?.shippingLines || [];
 
     /**
      * Custom fees
      */
-    this.feeLines = data.feeLines || [];
+    this.feeLines = data?.feeLines || [];
 
     /**
      * Discounts
      */
-    this.discountLines = data.discountLines || [];
+    this.discountLines = data?.discountLines || [];
 
     /**
      * Total
      */
-    this.discount = data.discount || 0;
-    this.subtotal = data.subtotal || 0;
-    this.total = data.total || 0;
-    this.discount = data.discount || 0;
+    this.discount = data?.discount || 0;
+    this.subtotal = data?.subtotal || 0;
+    this.total = data?.total || 0;
+    this.discount = data?.discount || 0;
 
     /**
      * Status
      */
-    this.status = data.status;
+    this.status = data?.status;
   }
 
   static make(data) {

@@ -1,10 +1,9 @@
 class User {
   constructor(data) {
-    this.id = data.id;
-    this.username = data.username;
-    this.fullName = data.fullName;
-    this.password = data.password;
-    this.permissions = data.permissions ?? [];
+    this.username = data?.username;
+    this.fullName = data?.fullName;
+    this.password = data?.password;
+    this.permissions = data?.permissions ?? [];
   }
 
   static make(data) {

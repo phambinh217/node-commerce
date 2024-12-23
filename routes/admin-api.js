@@ -6,6 +6,7 @@ const ProductCollectionController = require("@/app/Http/Controllers/AdminApi/Pro
 const SettingController = require("@/app/Http/Controllers/AdminApi/SettingController");
 const AuthController = require("@/app/Http/Controllers/AdminApi/AuthController");
 const SaleReportController = require("@/app/Http/Controllers/AdminApi/SaleReportController");
+const CustomerController = require("@/app/Http/Controllers/AdminApi/CustomerController");
 
 /**
  * Middleware
@@ -67,6 +68,15 @@ router.get("/products/collections", (req, res) =>
   ProductCollectionController.index(req, res)
 );
 router.get("/products/:group", (req, res) => ProductController.show(req, res));
+
+/**
+ * ------------------------
+ * Customer routes
+ * ------------------------
+ */
+router.get("/customers", (req, res) =>
+  CustomerController.index(req, res)
+);
 
 /**
  * ------------------------

@@ -4,7 +4,6 @@ const OrderShippingLine = require("@/app/Entities/OrderShippingLine");
 const OrderFeeLine = require("@/app/Entities/OrderFeeLine");
 const OrderDiscountLine = require("@/app/Entities/OrderDiscountLine");
 const Address = require("@/app/Entities/Address");
-const BadAction = require("@/app/Utilities/BadAction");
 const OrderRepository = require("@/app/Repositories/OrderRepository");
 const OrderNumberManager = require("@/app/Utilities/OrderNumberManager");
 
@@ -22,13 +21,6 @@ class CreateOrder {
   }
 
   execute() {
-    if (
-      this.data.billingEmail &&
-      this.data.billingEmail.includes("@") == false
-    ) {
-      return BadAction.fromString("Invalid email address");
-    }
-
     const orderNumberManager = new OrderNumberManager();
 
     const order = Order.make({

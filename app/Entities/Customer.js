@@ -1,5 +1,8 @@
-class Address {
+const { v4: uuidv4 } = require("uuid");
+
+class Customer {
   constructor(data) {
+    this.id = data?.id || uuidv4();
     this.name = data?.name;
     this.phone = data?.phone;
     this.email = data?.email;
@@ -13,7 +16,7 @@ class Address {
   }
 
   static make(data) {
-    return new Address(data);
+    return new Customer(data);
   }
 
   getName() {
@@ -64,4 +67,4 @@ class Address {
   }
 }
 
-module.exports = Address;
+module.exports = Customer;
